@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
  xmlns:em="http://www.mozilla.org/2004/em-rdf#">
   <Description about="urn:mozilla:install-manifest">
     <em:id>FireXPath@pierre.tholence.com</em:id>
-    <em:version>0.9.7</em:version>
-    
+    <em:version>0.9.7a</em:version>
+
     <!-- Firefox -->
     <em:targetApplication>
       <Description>
@@ -13,7 +13,7 @@
         <em:maxVersion>7.*</em:maxVersion>
       </Description>
     </em:targetApplication>
-    
+
     <em:name>FirePath</em:name>
     <em:description>FirePath is a Firebug extension that adds a development tool to edit, inspect and generate XPath 1.0 expressions, CSS 3 selectors and JQuery selectors. </em:description>
     <em:creator>Pierre Tholence</em:creator>

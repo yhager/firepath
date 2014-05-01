@@ -2,28 +2,28 @@
 <!DOCTYPE bindings SYSTEM "chrome://firepath/locale/FirePath.dtd">
 <!--
 	Copyright (C) 2009 - 2010 Pierre Tholence
-	
+
 	This file is part of FirePath
-	
+
 	FirePath is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
-	
+
 	FirePath is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
-	
+
 	You should have received a copy of the GNU General Public License
 	along with FirePath.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <bindings xmlns="http://www.mozilla.org/xbl"
 	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-	
+
 	<binding id="FirePath-textbox" extends="chrome://global/content/bindings/textbox.xml#textbox">
 		<implementation>
-			
+
 			<field name="_firePathBar">null</field>
 			<property name="firePathBar" readonly="true">
 				<getter><![CDATA[
@@ -31,7 +31,7 @@
 					this._firePathBar : this._firePathBar = document.getBindingParent(this);
 				]]></getter>
 			</property>
-			
+
 			<method name="setStatus">
 				<parameter name="status"/>
 				<parameter name="info"/>
@@ -43,7 +43,7 @@
 					this.tooltipText = info || "";
 				]]></body>
 			</method>
-			
+
 			<method name="checkSyntax">
 				<body><![CDATA[
 					if (this.value === "" || this.firePathBar.isValidSelector(this.value)) {
@@ -53,7 +53,7 @@
 					}
 				]]></body>
 			</method>
-			
+
 			<method name="setValue">
 				<parameter name="value"/>
 				<body><![CDATA[
@@ -86,7 +86,7 @@
 			]]></handler>
 		</handlers>
 	</binding>
-	
+
 	<binding id="FirePathBar" extends="xul:hbox">
 		<content>
 			<xul:toolbarseparator/>
@@ -117,20 +117,22 @@
 			</xul:toolbaritem>
 			<xul:toolbarbutton label="&FirePath.eval.button;" oncommand="document.getBindingParent(this).evaluate();">
 			</xul:toolbarbutton>
+      <xul:toolbarbutton label="&FirePath.clear.button;" oncommand="document.getBindingParent(this).clear();">
+      </xul:toolbarbutton>
 		</content>
 		<implementation>
-			
+
 			<!--******************************************************************************************************
 				fields and properties
 			-->
-			
+
 			<field name="NSResolver">null</field>
 			<field name="parentNodes">null</field>
 			<field name="lastSelector">null</field>
 			<field name="lastParent">null</field>
 			<field name="lastParentSelector">null</field>
 			<field name="_evaluator">null</field>
-			
+
 			<property name="autoCompleter" readonly="true">
 				<getter><![CDATA[
 					if(this.evaluationMode === 'xpath'){
@@ -146,14 +148,14 @@
 					}
 				]]></getter>
 			</property>
-			
+
 			<property name="xPathEvaluator" readonly="true">
 				<getter><![CDATA[
 					return this._evaluator ?
 					this._evaluator : this._evaluator = new XPathEvaluator();
 				]]></getter>
 			</property>
-			
+
 			<property name="selector">
 				<getter><![CDATA[
 					return this.getElement("firepath-textbox").value;
@@ -163,7 +165,7 @@
 					return val;
 				]]></setter>
 			</property>
-			
+
 			<property name="parentSelector">
 				<getter><![CDATA[
 					var textbox = this.getElement("parent-textbox");
@@ -176,31 +178,31 @@
 					return val;
 				]]></setter>
 			</property>
-			
+
 			<property name="parentNodeNumber" readonly="true">
 				<getter><![CDATA[
 					return this.getElement("parent-node-number-textbox");
 				]]></getter>
 			</property>
-			
+
 			<property name="parentToolbar" readonly="true">
 				<getter><![CDATA[
 					return this.getElement("firepath-context-toolbar");
 				]]></getter>
 			</property>
-			
+
 			<property name="highlightButton" readonly="true">
 				<getter><![CDATA[
 					return this.getElement("highlight-button");
 				]]></getter>
 			</property>
-			
+
 			<property name="FirePathPanel" readonly="true">
-				<getter><![CDATA[	
+				<getter><![CDATA[
 					return Firebug.currentContext.getPanel(Firebug.FirePathPanel.prototype.name);
 				]]></getter>
 			</property>
-			
+
 			<property name="selectorGenerator" readonly="true">
 				<getter><![CDATA[
 					// Sizzle is more CSS than XPath, so let it get grouped with css
@@ -208,19 +210,19 @@
 							FBL.getXPathFromNode: FBL.getCssSelectorFromNode;
 				]]></getter>
 			</property>
-			
+
 			<!--******************************************************************************************************
 				Constructor
 			-->
-			
+
 			<constructor><![CDATA[
 				this.initialize()
 			]]></constructor>
-			
+
 			<!--******************************************************************************************************
 				State management method
 			-->
-			
+
 			<method name="initialize">
 				<body><![CDATA[
 					if(Firebug) {
@@ -229,7 +231,7 @@
 					}
 				]]></body>
 			</method>
-			
+
 			<method name="init">
 				<parameter name="context"/>
 				<body><![CDATA[
@@ -250,7 +252,7 @@
 				<body><![CDATA[
 					this.collapsed = !show;
 					if(show) {
-						this.currentContext = context; 
+						this.currentContext = context;
 						if(!context.firePathBarInit)
 							this.init(context);
 						else
@@ -265,7 +267,7 @@
 					}
 				]]></body>
 			</method>
-			
+
 			<method name="persiste">
 				<parameter name="state"/>
 				<body><![CDATA[
@@ -273,7 +275,7 @@
 					this.copyState(this, state.firePathBarState);
 				]]></body>
 			</method>
-			
+
 			<method name="restore">
 				<parameter name="state"/>
 				<body><![CDATA[
@@ -282,7 +284,7 @@
 					}
 				]]></body>
 			</method>
-			
+
 			<method name="copyState">
 				<parameter name="from"/>
 				<parameter name="to"/>
@@ -299,21 +301,21 @@
 					to.lastParent = from.lastParent;
 				]]></body>
 			</method>
-			
+
 			<!--******************************************************************************************************
 				Selector Evaluation methods
 			-->
-			
+
 			<method name="evaluate">
 				<parameter name="reevaluate"/>
 				<body><![CDATA[
 					var selector = this.selector;
 					if(reevaluate)
 						selector = this.lastSelector;
-					
+
 					var context = this.getContextNode(reevaluate);
 					if(selector != "") {
-							
+
 						var contextTextbox = this.getElement("parent-textbox");
 						if(context) {
 							contextTextbox.setStatus();
@@ -322,7 +324,7 @@
 								contextTextbox.setStatus("warning", FBL.$STR_XP("unusedParentNode"));
 							}
 						}
-						
+
 						var result = this._evaluateExpression(this.selector, context);
 						this.lastSelector = this.selector;
 						this.lastParent = context;
@@ -333,7 +335,13 @@
 					}
 				]]></body>
 			</method>
-			
+
+      <method name="clear">
+        <body><![CDATA[
+          this.getElement("firepath-textbox").setValue("");
+        ]]></body>
+      </method>
+
 			<method name="getXPathExpression">
 				<parameter name="xPath"/>
 				<body><![CDATA[
@@ -341,7 +349,7 @@
 						if (xPath && FBL.isHtmlDocument(this.FirePathPanel.location.document)) {
 							// we want to lower case the XPath expression but not the literal inside.
 							//  eg: //DIV[@id='TEST'] should become //div[@id='TEST']
-							xPath = xPath.replace(/([^'"]*)('[^']+'|"[^"]+")?/g, 
+							xPath = xPath.replace(/([^'"]*)('[^']+'|"[^"]+")?/g,
 								function(str, expression, literal){return expression.toLowerCase() + literal;});
 						}
 						return this.xPathEvaluator.createExpression(xPath, this.NSResolver);
@@ -350,7 +358,7 @@
 					}
 				]]></body>
 			</method>
-			
+
 			<method name="_evaluateExpression">
 				<parameter name="selector"/>
 				<parameter name="contextNode"/>
@@ -399,7 +407,7 @@
 						// Inject Sizzle.js into the page.
 
 						// Store target window's original Sizzle, if any
-						var originalSizzle = win.wrappedJSObject.Sizzle; 							
+						var originalSizzle = win.wrappedJSObject.Sizzle;
 						var scriptSource = FBL.getResource("chrome://firepath/content/sizzle.js");
 						var addedElement = FBL.addScript(doc, "firePathSizzle", scriptSource);
 
@@ -414,7 +422,7 @@
 						}
 
 						// take the script tag back out now that the script is loaded
-						addedElement.parentNode.removeChild(addedElement); 
+						addedElement.parentNode.removeChild(addedElement);
 
 						firePathSizzle = win.firePathSizzle;
 					}
@@ -429,7 +437,7 @@
 					}
 				]]></body>
 			</method>
-			
+
 			<method name="createNSResolver">
 				<parameter name="doc"/>
 				<body><![CDATA[
@@ -439,7 +447,7 @@
 					}
 				]]></body>
 			</method>
-			
+
 			<method name="getMappingPrefixNS">
 				<parameter name="doc"/>
 				<body><![CDATA[
@@ -464,7 +472,7 @@
 					return prefixToNS;
 				]]></body>
 			</method>
-			
+
 			<method name="getContextNode" readonly="true">
 				<parameter name="reevaluate"/>
 				<body><![CDATA[
@@ -474,9 +482,9 @@
 						return this.parentNodes[this.parentNodeNumber.value - 1];
 					else {
 						var nodes = this._evaluateExpression(this.parentSelector, null, true);
-						
+
 						this.lastParentSelector = this.parentSelector;
-						
+
 						if(FBL.isArray(nodes) && nodes.length > 0) {
 							if(!reevaluate) {
 								this.parentNodeNumber.collapsed = (nodes.length == 1);
@@ -500,11 +508,11 @@
 					}
 				]]></body>
 			</method>
-			
+
 			<!--******************************************************************************************************
 				methods to manage the mode
 			-->
-			
+
 			<method name="changeMode">
 				<parameter name="event"/>
 				<body><![CDATA[
@@ -516,7 +524,7 @@
 					this.evaluate();
 				]]></body>
 			</method>
-			
+
 			<method name="setEvaluationMode">
 				<parameter name="mode"/>
 				<body><![CDATA[
@@ -530,15 +538,15 @@
 					this.evaluationMode = evaluationMode;
 					var menuitem = document.getAnonymousElementByAttribute(button, "mode", evaluationMode);
 					button.label = menuitem.label;
-					
+
 					Firebug.setPref(Firebug.prefDomain, "firepath.evaluationMode", evaluationMode);
 				]]></body>
 			</method>
-			
+
 			<!--******************************************************************************************************
 				public methods, used by the panel
 			-->
-			
+
 			<method name="setNode">
 				<parameter name="node"/>
 				<parameter name="noEval"/>
@@ -549,7 +557,7 @@
 					}
 				]]></body>
 			</method>
-			
+
 			<method name="setContextNode">
 				<parameter name="node"/>
 				<body><![CDATA[
@@ -557,7 +565,7 @@
 					this.evaluate();
 				]]></body>
 			</method>
-			
+
 			<method name="updateLocation">
 				<parameter name="location"/>
 				<body><![CDATA[
@@ -565,7 +573,7 @@
 					this.reset();
 				]]></body>
 			</method>
-			
+
 			<method name="reset">
 				<body><![CDATA[
 					delete this.lastSelector;
@@ -573,7 +581,7 @@
 					delete this.lastParentSelector;
 				]]></body>
 			</method>
-			
+
 			<method name="showParentToolbar">
 				<parameter name="show"/>
 				<body><![CDATA[
@@ -581,17 +589,17 @@
 					this.reset();
 				]]></body>
 			</method>
-			
+
 			<!--******************************************************************************************************
 				public methods, used by the xpath autoCompleter
 			-->
-			
+
 			<method name="hasResult">
 				<parameter name="xPath"/>
 				<body><![CDATA[
 					var xPathExpression = this.getXPathExpression(xPath);
 					if(!xPathExpression) return false;
-					
+
 					var result;
 					try{
 						result = xPathExpression.evaluate(this.getContextNode() || this.FirePathPanel.location.document, XPathResult.ANY_UNORDERED_NODE_TYPE, null);
@@ -601,13 +609,13 @@
 					return result.singleNodeValue != null;
 				]]></body>
 			</method>
-			
+
 			<method name="evaluateExpression">
 				<parameter name="xPath"/>
 				<body><![CDATA[
 					var xPathExpression = this.getXPathExpression(xPath);
 					if(!xPathExpression) return null;
-					
+
 					var result;
 					try{
 						result = xPathExpression.evaluate(this.getContextNode() || this.FirePathPanel.location.document, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null);
@@ -617,18 +625,18 @@
 					return this.processResult(result);
 				]]></body>
 			</method>
-			
+
 			<!--******************************************************************************************************
 				Helper Methods
 			-->
-				
+
 			<method name="getElement">
 				<parameter name="aAnonymousID"/>
 				<body><![CDATA[
 					return document.getAnonymousElementByAttribute(this, "anonid", aAnonymousID);
 				]]></body>
 			</method>
-			
+
 			<method name="isValidSelector">
 				<parameter name="value"/>
 				<body><![CDATA[
@@ -648,7 +656,7 @@
 					}
 				]]></body>
 			</method>
-			
+
 			<method name="processResult">
 				<parameter name="evaluationResult"/>
 				<body><![CDATA[
@@ -668,7 +676,7 @@
 								(node.ownerElement && node.ownerElement.firebugIgnore) ||
 								(node.parentNode && node.parentNode.firebugIgnore) ||
 								node.id == "_firebugConsole")
-									continue; 
+									continue;
 							result.push(node);
 						}
 						return result;
@@ -677,7 +685,7 @@
 			</method>
 		</implementation>
 	</binding>
-	
+
 	<binding id="FirePathStatusBar" extends="xul:hbox">
 		<content>
 			<xul:statusbarpanel flex="1" align="center" pack="left">
@@ -685,30 +693,30 @@
 				<xul:label  anonid="firepath-result-info" value=""/>
 			</xul:statusbarpanel>
 			<xul:statusbarpanel anonid="firepath-result-progressmeter-container" collapsed="true">
-				<xul:image src="chrome://firebug/skin/errorIcon.png" 
-					onmousedown="document.getBindingParent(this).cancelLoading(Firebug.currentContext)" 
+				<xul:image src="chrome://firebug/skin/errorIcon.png"
+					onmousedown="document.getBindingParent(this).cancelLoading(Firebug.currentContext)"
 					class="firepath-cancel-result-loading-button"/>
 				<xul:progressmeter anonid="firepath-result-progressmeter"/>
 			</xul:statusbarpanel>
 		</content>
 		<implementation>
-			
+
 			<!--******************************************************************************************************
 				fields and properties
 			-->
-			
+
 			<property name="progressMeter" readonly="true">
 				<getter><![CDATA[
 					return this.getElement("firepath-result-progressmeter");
 				]]></getter>
 			</property>
-			
+
 			<property name="progressMeterContainer" readonly="true">
 				<getter><![CDATA[
 					return this.getElement("firepath-result-progressmeter-container");
 				]]></getter>
 			</property>
-			
+
 			<property name="resultInfo">
 				<getter><![CDATA[
 					return this.getElement("firepath-result-info").value;
@@ -718,7 +726,7 @@
 					return val;
 				]]></setter>
 			</property>
-			
+
 			<property name="resultIcon">
 				<getter><![CDATA[
 					return this.getElement("firepath-result-icon").getAttribute("status");
@@ -728,11 +736,11 @@
 					return val;
 				]]></setter>
 			</property>
-			
+
 			<!--******************************************************************************************************
 				ProgressMeter management
 			-->
-			
+
 			<method name="startLoading">
 				<parameter name="context"/>
 				<parameter name="stepNumber"/>
@@ -744,7 +752,7 @@
 					this.progressMeterContainer.collapsed = false;
 				]]></body>
 			</method>
-			
+
 			<method name="increaseLoading">
 				<parameter name="context"/>
 				<body><![CDATA[
@@ -753,7 +761,7 @@
 						this.progressMeter.value = context.FirePathStatusBar.currentStep / context.FirePathStatusBar.stepNumber * 100;
 				]]></body>
 			</method>
-			
+
 			<method name="stopLoading">
 				<parameter name="context"/>
 				<body><![CDATA[
@@ -761,7 +769,7 @@
 					this.progressMeterContainer.collapsed = true;
 				]]></body>
 			</method>
-			
+
 			<method name="cancelLoading">
 				<parameter name="context"/>
 				<body><![CDATA[
@@ -772,13 +780,13 @@
 					context.FirePathStatusBar.resultInfo = this.resultInfo;
 				]]></body>
 			</method>
-			
-			
-			
+
+
+
 			<!--******************************************************************************************************
 				Result info management
 			-->
-			
+
 			<method name="setResultInfo">
 				<parameter name="context"/>
 				<parameter name="status"/>
@@ -790,7 +798,7 @@
 					this.resultIcon = status;
 				]]></body>
 			</method>
-			
+
 			<method name="clearResultInfo">
 				<parameter name="context"/>
 				<body><![CDATA[
@@ -800,7 +808,7 @@
 					this.resultIcon = "";
 				]]></body>
 			</method>
-			
+
 			<!--******************************************************************************************************
 				other public methods
 			-->
@@ -820,18 +828,18 @@
 					this.collapsed = !show;
 				]]></body>
 			</method>
-			
+
 			<method name="reset">
 				<parameter name="context"/>
 				<body><![CDATA[
 					this.clearResultInfo(context);
 				]]></body>
 			</method>
-			
+
 			<!--******************************************************************************************************
 				Helper Methods
 			-->
-				
+
 			<method name="getElement">
 				<parameter name="aAnonymousID"/>
 				<body><![CDATA[
